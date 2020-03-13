@@ -6,8 +6,6 @@ from imgui.integrations.pygame import PygameRenderer
 import imgui
 
 
-import cv2
-from imgui_datascience import imgui_cv, imgui_fig
 import matplotlib.pyplot as plt
 import numpy as np
 import os
