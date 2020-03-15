@@ -5,8 +5,7 @@ import matplotlib.pyplot as plt
 from sklearn.feature_extraction.text import TfidfVectorizer
 from scipy.cluster.hierarchy import ward, dendrogram
 
-if __name__ == "__main__":
-    # prepare date to run cluster
+def DrawCluster():
     SS = []
 
     manual_files = eval(open('ManualFiles.log', 'r').read())
@@ -32,3 +31,6 @@ if __name__ == "__main__":
                 no_labels=True,
                 color_threshold=4) # you can tune this value to deside how many group
     plt.savefig("Cluster.png", dpi=60)
+
+if __name__ == "__main__":
+    DrawCluster()

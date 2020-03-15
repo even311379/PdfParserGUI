@@ -1,6 +1,6 @@
 import imgui
 from imgui.integrations.pygame import PygameRenderer
-import Utils.GUI_Functions as GF
+import GUI_Functions as GF
 import GUI
 
 import tkinter as tk
@@ -8,13 +8,15 @@ from tkinter import filedialog
 
 import os
 import subprocess
-
+from ParseScoreSheet import StartParse
+from CheckGroup import DrawCluster
+from GroupPdf import CreateGroup
 
 imgui.create_context()
 io = imgui.get_io()
-smallfont = io.fonts.add_font_from_file_ttf("asset\\NotoSansTC-Black.otf", 12, io.fonts.get_glyph_ranges_chinese_full())
-normalfont = io.fonts.add_font_from_file_ttf("asset\\NotoSansTC-Black.otf", 16, io.fonts.get_glyph_ranges_chinese_full())
-largefont = io.fonts.add_font_from_file_ttf("asset\\NotoSansTC-Black.otf", 28, io.fonts.get_glyph_ranges_chinese_full())
+smallfont = io.fonts.add_font_from_file_ttf("NotoSansTC-Black.otf", 12, io.fonts.get_glyph_ranges_chinese_full())
+normalfont = io.fonts.add_font_from_file_ttf("NotoSansTC-Black.otf", 16, io.fonts.get_glyph_ranges_chinese_full())
+largefont = io.fonts.add_font_from_file_ttf("NotoSansTC-Black.otf", 28, io.fonts.get_glyph_ranges_chinese_full())
 
 WDIR = ""
 ODIR = ""
@@ -124,7 +126,9 @@ def ParsePdfWidget():
                 if WDIR == "":
                     imgui.text("請設定檔案目錄")
                 else:
-                    subprocess.run(["python","Subprocesses/ParseScoreSheet.py", WDIR, ODIR])                        
+                    StartParse(WDIR, ODIR)
+                    #subprocess.run(["python","ParseScoreSheet.py", WDIR, ODIR])                        
+
         imgui.separator()
     if os.path.isfile('ManualFiles.log'):
         with imgui.font(largefont):
@@ -133,7 +137,8 @@ def ParsePdfWidget():
         changed, N_Group = imgui.slider_int("幾群?", N_Group, min_value = 2, max_value = 20)
         imgui.text(f"分成{N_Group}群")        
         if imgui.button("開始分群"):
-            subprocess.run(["python","Subprocesses/GroupPdf.py", ODIR, str(N_Group)])
+            CreateGroup(ODIR, N_Group)
+            #subprocess.run(["python","GroupPdf.py", ODIR, str(N_Group)])
         imgui.separator()
     if os.path.isdir(ODIR+"/Manual"):
         with imgui.font(largefont):
@@ -159,7 +164,8 @@ def ParserStaticsWidget():
         imgui.separator()        
         imgui.text("Run a hierarchical clustering to check how many potential groups?")
         if imgui.button("RUN"):
-            subprocess.run(["python","Subprocesses/CheckGroup.py"])       
+            DrawCluster()
+            #subprocess.run(["python","CheckGroup.py"])       
     else:
         imgui.text("尚未解析推甄資料中的成績單內容")
 

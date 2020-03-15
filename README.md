@@ -1,17 +1,23 @@
 # PdfParser With PyImgui
 
-Running on Windows 10 Setup guide:
+Windows 10 Build Success branch
 
-(1) 安裝Windows 10 SDK、C++ x64/x86 build tools，請參考:
+(1) Need to mannaul fix some source code for pyinstaller
 
-https://www.scivision.dev/python-windows-visual-c-14-required/
+Add this in envs\PdfGUI\Lib\site-packages\PyInstaller\utils\misc.py L128
+As this post suggest
+https://github.com/pyinstaller/pyinstaller/issues/4034
+```code
+if fnm in ('-', None):
+    continue
+```
 
-(2) 前往安裝anaconda3:
+(2) use cmd to run the build results to prevent debug message disappeared
 
-https://www.anaconda.com/distribution/
+(3) then just keeps google and add some hidden imports back, and everything should be fine!
 
-(3) 修改setup.bat與run.bat的第一型目錄位置，改至你安裝的anaconda位置
+(4) Can not run multiprocess!! It just make so many GUI window pops up, so I end up turn off multiprocess for now!
 
-(4) 第一次執行，請先點兩下Setup.bat，設定虛擬環境安裝需求套件，過程中請輸入y
+Download the builds here:
 
-(5) 點兩下Run.bat，即可打開GUI。
+https://drive.google.com/open?id=1-NkQtVqe8gvVSKaCasAwswsj7edc6f-p

@@ -10,10 +10,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-import Utils.GUI_Functions as GF
-import Utils.GUI_Elements as GE
+import GUI_Functions as GF
+import GUI_Elements as GE
 
 import subprocess
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from scipy.cluster.hierarchy import ward
+from sklearn.cluster import AgglomerativeClustering
 
 #from Subprocesses import ParseScoreSheet
 
@@ -49,7 +53,7 @@ def main():
     
     clock = pygame.time.Clock()
 
-    favicon = pygame.image.load('asset\\Logo.png')
+    favicon = pygame.image.load('Logo.png')
     pygame.display.set_icon(favicon)
 
     imgui.create_context()
@@ -57,9 +61,9 @@ def main():
     impl = PygameRenderer()        
 
     io = imgui.get_io()
-    smallfont = io.fonts.add_font_from_file_ttf("asset\\NotoSansTC-Black.otf", 12, io.fonts.get_glyph_ranges_chinese_full())
-    normalfont = io.fonts.add_font_from_file_ttf("asset\\NotoSansTC-Black.otf", 16, io.fonts.get_glyph_ranges_chinese_full())
-    largefont = io.fonts.add_font_from_file_ttf("asset\\NotoSansTC-Black.otf", 28, io.fonts.get_glyph_ranges_chinese_full())
+    smallfont = io.fonts.add_font_from_file_ttf("NotoSansTC-Black.otf", 12, io.fonts.get_glyph_ranges_chinese_full())
+    normalfont = io.fonts.add_font_from_file_ttf("NotoSansTC-Black.otf", 16, io.fonts.get_glyph_ranges_chinese_full())
+    largefont = io.fonts.add_font_from_file_ttf("NotoSansTC-Black.otf", 28, io.fonts.get_glyph_ranges_chinese_full())
     io.fonts.add_font_default()
     impl.refresh_font_texture()
     io.display_size = size

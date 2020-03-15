@@ -11,10 +11,7 @@ from scipy.cluster.hierarchy import ward
 from sklearn.cluster import AgglomerativeClustering
 from shutil import copyfile
 
-if __name__ == '__main__':
-    ODIR = str(sys.argv[1])
-    N_Group = int(sys.argv[2])
-
+def CreateGroup(ODIR, N_Group):
     SS = []
     manual_files = eval(open('ManualFiles.log', 'r').read())
 
@@ -57,3 +54,9 @@ if __name__ == '__main__':
             D.append('手動處理！！加油！！')
             DL.append(D)
         pd.DataFrame(DL,columns=columns).to_excel(f'{ODIR}/manual/G{i}/template_G{i}.xlsx',index=False)
+
+
+if __name__ == '__main__':
+    ODIR = str(sys.argv[1])
+    N_Group = int(sys.argv[2])
+    CreateGroup(ODIR, N_Group)

@@ -2,15 +2,11 @@ import os
 import sys
 import pandas as pd
 import numpy as np
-try:
-    from Subprocesses.ScoreSheetParsers import complete_patterns, missing_patterns
-except:
-    from ScoreSheetParsers import complete_patterns, missing_patterns
-
+from ScoreSheetParsers import complete_patterns, missing_patterns
 import pdftotext
 import jieba
 import re
-from multiprocessing import Pool
+#from multiprocessing import Pool
 
 def ParseProcess(ListOfPath):
 
@@ -39,10 +35,7 @@ def ParseProcess(ListOfPath):
 
     return DD, Failed_files
 
-if __name__ == '__main__':
-    WDIR = str(sys.argv[1])
-    ODIR = str(sys.argv[2])
-
+def StartParse(WDIR, ODIR):
     upper_most = WDIR
     NameErrorFiles = []
     all_pdf_files = [ f'{upper_most}/{i}/{j}/{j}.pdf' for i in os.listdir(upper_most) for j in os.listdir(upper_most+'/'+i) ]
@@ -50,19 +43,21 @@ if __name__ == '__main__':
         if not os.path.exists(file):
             all_pdf_files.remove(file)
             NameErrorFiles.append(file)
-    subpath = []
-    N = int(len(all_pdf_files)/15)
-    for i in range(14):
-        subpath.append(all_pdf_files[N*(i):N*(i+1)])
-    subpath.append(all_pdf_files[N*(i+1):])
+    #subpath = []
+    #N = int(len(all_pdf_files)/15)
+    #for i in range(14):
+    #    subpath.append(all_pdf_files[N*(i):N*(i+1)])
+    #subpath.append(all_pdf_files[N*(i+1):])
 
-    p = Pool(processes = 15)
-    data = p.map(ParseProcess,subpath)
-    DD = []
-    ManualFiles = []
-    for d in data:
-        DD += d[0]
-        ManualFiles += d[1]
+    #p = Pool(processes = 15)
+    #data = p.map(ParseProcess,subpath)
+    #DD = []
+    #ManualFiles = []
+    #for d in data:
+    #    DD += d[0]
+    #    ManualFiles += d[1]
+
+    DD, ManualFiles = ParseProcess(all_pdf_files)
 
     N_All = len(all_pdf_files)
     N_Success = len(DD)
@@ -92,3 +87,10 @@ if __name__ == '__main__':
     df_min = pd.concat([df.iloc[:,i*5+4:i*5+9].min(axis=1) for i in range(3)],axis=1)
     df_min.columns=['最佳班排','最佳組排','最佳校排']
     pd.concat([df,df_min],axis=1).to_excel(f'{ODIR}/Result.xlsx',index=False)
+
+if __name__ == '__main__':
+    WDIR = str(sys.argv[1])
+    ODIR = str(sys.argv[2])
+
+    StartParse(WDIR, ODIR)
+    

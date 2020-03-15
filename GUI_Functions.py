@@ -3,7 +3,7 @@ import os
 import shutil
 import OpenGL.GL as gl
 import pygame
-from pdf2image import convert_from_path
+
 
 
 def OpenHelper():
@@ -58,15 +58,6 @@ def loadImage(image_name):
 
     return texture, width, height
 
-def Pdf2Imgs(FilePath):
-    if os.path.isdir('tmp'):
-        shutil.rmtree('tmp')
-    images = convert_from_path(FilePath)
-    os.mkdir('tmp')
-    for i, img in enumerate(images):
-        img.save(f'tmp/{i}.png')
-
-    return FilePath
 
 def SetCustomStyle1(style):
     '''
