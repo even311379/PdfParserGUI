@@ -44,7 +44,12 @@ if __name__ == '__main__':
     ODIR = str(sys.argv[2])
 
     upper_most = WDIR
+    NameErrorFiles = []
     all_pdf_files = [ f'{upper_most}/{i}/{j}/{j}.pdf' for i in os.listdir(upper_most) for j in os.listdir(upper_most+'/'+i) ]
+    for file in all_pdf_files:
+        if not os.path.exists(file):
+            all_pdf_files.remove(file)
+            NameErrorFiles.append(file)
     subpath = []
     N = int(len(all_pdf_files)/15)
     for i in range(14):
@@ -65,6 +70,13 @@ if __name__ == '__main__':
     with open('ParseResult.log', 'w+') as r:
         r.write('*********\n')
         r.write(f'共 {N_All} 筆檔案\n')
+        if NameErrorFiles:
+            r.write('*********\n')
+            r.write(f'!!!! 含有{len(NameErrorFiles)}筆命名錯誤檔案:\n')
+            for file in NameErrorFiles:
+                r.write(f'    {file}\n')
+            r.write(f'請手動處理補上 !!!!\n')
+            r.write('*********\n')
         r.write(f'成功解析: {N_Success}筆 ({R_Success}%)!\n')
         r.write(f'剩餘 {N_All - N_Success} 筆需手動處理!\n')
         r.write('*********')

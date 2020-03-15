@@ -25,7 +25,6 @@ def main():
     # window visible params
     bShowInfoPopUp = False
     bShowFiles = True
-    bShowViewPdf = False
     bShowParsePdf = True
     bShowParserStatics = True
 
@@ -136,15 +135,19 @@ def main():
                     else:
                         F, _ = imgui.menu_item(label = "選擇目錄", shortcut = None, selected = True, enabled = True)
                     if F:
-                        bShowFiles = not bShowFiles                                            
-                    if o:
-                        bShowViewPdf = not bShowViewPdf
+                        bShowFiles = not bShowFiles                                                                
                     if not bShowParsePdf:
-                        o, _ = imgui.menu_item(label = "解析PDF成績單",shortcut = None, selected = False, enabled = True)
+                        o, _ = imgui.menu_item(label = "解析成績單",shortcut = None, selected = False, enabled = True)
                     else:
-                        o, _ = imgui.menu_item(label = "解析PDF成績單",shortcut = None, selected = True, enabled = True)
+                        o, _ = imgui.menu_item(label = "解析成績單",shortcut = None, selected = True, enabled = True)
                     if o:
                         bShowParsePdf = not bShowParsePdf
+                    if not bShowParserStatics:
+                        r, _ = imgui.menu_item(label = "解析結果",shortcut = None, selected = False, enabled = True)
+                    else:
+                        r, _ = imgui.menu_item(label = "解析結果",shortcut = None, selected = True, enabled = True)
+                    if r:
+                        bShowParserStatics = not bShowParserStatics
 
                     imgui.end_menu()
 

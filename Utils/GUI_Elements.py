@@ -21,14 +21,7 @@ ODIR = ""
 LoadedFile = ""
 InstIndex = 0
 PersonIndex = 0
-
-PDF_PAGE = 0
-PDF_MPAGE = 0
-PDF_TEXT = ""
-PDF_IMG = ""
-
-ReloadPDF = True
-
+AllFileStatus = "尚未檢查"
 N_Group = 10
 
 def TkFileDialog():
@@ -46,8 +39,7 @@ def ProgramInfoPopup():
     imgui.bullet_text("版本: 0.1 alpha")
     imgui.bullet_text("開發: PUF STUDIO")
     imgui.bullet_text("Email: even311379@hotmail.com")
-    imgui.bullet_text("Git Repo: https://github.com/even311379/scoresheet_parser")
-    imgui.bullet_text("Project Management: https://app.hacknplan.com/p/113670/dashboards/project")
+    imgui.bullet_text("Git Repo: https://github.com/even311379/PdfParserGUI")
 
 
 def FileWindow():
@@ -98,6 +90,7 @@ def ParsePdfWidget():
     global WDIR
     global ODIR
     global N_Group
+    global AllFileStatus
 
     with imgui.font(largefont):
         imgui.text("Step 1: 設定工作目錄")
@@ -105,25 +98,33 @@ def ParsePdfWidget():
     if WDIR:
         imgui.separator()
         with imgui.font(largefont):
-            imgui.text("Step 2: 檢查各別檔案(非必要)")
-        imgui.bullet_text("如果有需要，可以在此程式中顯示各別檔案。")
-        imgui.bullet_text("在瀏覽檔案的視窗中按下檢視這個檔案。")
+            imgui.text("Step 2: 檢查各別檔案")
+        imgui.push_text_wrap_position(450)
+        imgui.bullet_text("檔案命名有些錯誤，需要額外調整，如: 10054818.pdf 變為10054818_1.pdf")
+        imgui.dummy(50, 0)
+        imgui.same_line()
+        if imgui.button("檢查檔案"):
+            AllFileStatus = GF.CheckAllFiles(WDIR)
+        imgui.push_text_wrap_position(450)
+        imgui.text(AllFileStatus)
         imgui.separator()
         with imgui.font(largefont):
             imgui.text("Step 3: 執行程式-解析成績單內容")    
+        imgui.dummy(50, 0)
+        imgui.same_line()
         if imgui.button("設定輸出目錄"):
             ODIR = TkFileDialog()    
         if ODIR != "":
             imgui.text("輸出目錄位置:")
             imgui.push_text_wrap_position(250)
             imgui.text(ODIR)
+            imgui.dummy(50, 0)
+            imgui.same_line()
             if imgui.button("開始解析"):
                 if WDIR == "":
                     imgui.text("請設定檔案目錄")
                 else:
-                    with open('Progress.log', 'w+') as f:
-                        f.write(str(0))
-                    subprocess.run(["python","Subprocesses/ParseScoreSheet.py", WDIR, ODIR])                
+                    subprocess.run(["python","Subprocesses/ParseScoreSheet.py", WDIR, ODIR])                        
         imgui.separator()
     if os.path.isfile('ManualFiles.log'):
         with imgui.font(largefont):
@@ -149,7 +150,7 @@ def ParsePdfWidget():
 
     
 def ParserStaticsWidget():
-    imgui.push_text_wrap_position(200)
+    imgui.push_text_wrap_position(600)
     if os.path.isfile('ParseResult.log'):
         with imgui.font(largefont):
             imgui.text("結果")

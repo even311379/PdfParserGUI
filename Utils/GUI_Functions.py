@@ -7,7 +7,7 @@ from pdf2image import convert_from_path
 
 
 def OpenHelper():
-    webbrowser.open('https://github.com/even311379/scoresheet_parser', new=2)
+    webbrowser.open('https://github.com/even311379/PdfParserGUI', new=2)
 
 def CheckWDIR(wdir):
     try:
@@ -21,6 +21,25 @@ def CheckWDIR(wdir):
 
     except:
         return False	
+
+def CheckAllFiles(WDIR):
+    upper_most = WDIR
+    all_pdf_files = [ f'{upper_most}/{i}/{j}/{j}.pdf' for i in os.listdir(upper_most) for j in os.listdir(upper_most+'/'+i) ]
+    N_NameError = 0
+    ErrorPath = []
+    for f in all_pdf_files:
+        if not os.path.exists(f):
+            N_NameError += 1
+            ErrorPath.append(f)
+    
+    if N_NameError:
+        s = "**發現命名錯誤**: \n"
+        for path in ErrorPath:
+            s += path + '\n'
+        return s
+    else:
+        return "一切正常"
+
 
 def loadImage(image_name):
 
